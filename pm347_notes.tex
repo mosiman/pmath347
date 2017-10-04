@@ -1,0 +1,779 @@
+\documentclass{article}
+
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage[most]{tcolorbox} 
+\usepackage[english]{babel} 
+\usepackage[margin=1in]{geometry} 
+\usepackage{parskip}
+
+\newtheorem{theorem}{Theorem} 
+
+% Defines a colored theorem-like environment boxes, including a "proof" environemnt.
+\newtcbtheorem[number within=section]{cthm}{Theorem}{colback=green!5,colframe=green!35!black,fonttitle=\bfseries}{th} 
+\newtcbtheorem[number within=section]{clem}{Lemma}{colback=orange!5,colframe=orange!35!black,fonttitle=\bfseries}{th} 
+\newtcbtheorem[number within=section]{cclaim}{Claim}{colback=orange!5,colframe=orange!35!black,fonttitle=\bfseries}{th} 
+\newtcbtheorem[number within=section]{ccor}{Corollary}{colback=orange!5,colframe=orange!35!black,fonttitle=\bfseries}{th} 
+\newtcbtheorem[number within=section]{cprop}{Proposition}{colback=orange!5,colframe=orange!35!black,fonttitle=\bfseries}{th} 
+\newtcbtheorem[number within=section]{cdef}{Definition}{colback=blue!5,colframe=blue!35!black,fonttitle=\bfseries}{th} 
+\newtcbtheorem[number within=section]{cex}{Example}{colback=purple!5,colframe=purple!35!black,fonttitle=\bfseries}{th} 
+\tcolorboxenvironment{cpf}{% 'proof' from 'amsthm'
+    blanker, breakable, left=5mm,
+    before skip=10pt, after skip=10pt,
+    borderline west={1mm}{0pt}{green}}
+
+\DeclareMathOperator{\order}{order}
+\newcommand{\abs}[1]{ \left| #1 \right|}
+
+
+%===============================%
+% Below are examples
+
+\begin{document}
+
+\section{Motivating Example: Dihedral and Permutation Groups}
+
+We will use dihedral and permutation groups to motivate a handful of concepts. 
+
+Consider a regular $n$-gon, for $n \geq 3$. For this example we will consider a \textbf{symmetry} to be a 'rigid motion in $\mathbb{R}^3$'. Rigid motions are akin to 'picking up' a shape and moving it around so that it covers the same area. These are not precise definitions.
+
+Let $D_{2n} $ be the set of all such symmetries. This will motivate our concept of a 'group'. It doesn't matter how the symmetries are made, just the end result. In this sense, two symmetries are the same if they have the same final position. 
+
+Let us fix a labelling of the verticies (i.e., assign each vertex a label 1, 2, 3, ... ). An element of $D_{2n} $ determines and is determined by how it permutes the verticies.
+
+\begin{cdef}{Permutation}{permutation}
+    A \textbf{permutation} of a set $X$  is a bijection
+    \[
+        \sigma : X \to X
+    \]
+    We let $S_{X} $ be the set of permutations of $X$ and $S_n = S_{\left\{ 1, 2, \cdots, n \right\}} $. 
+\end{cdef}
+We can see without much trouble that $D_{2n} \subset S_n$. We view $\sigma \in D_{2n} $ as the permutation $\left\{ 1, \cdots, n \right\} \to \left\{ 1, \cdots, n \right\}$ where $i \mapsto \text{the vertex that the symmetry $\sigma$ takes $i$ to}$. But not all permutations are symmetric!
+
+\begin{cex}{Permutations that aren't symmetric}{}
+Let $n=4$ and consider the $n$-gon (in fact, a square). Let $\sigma: (1,2,3,4) \to (2, 1, 3, 4)$. We can see that because the verticies aren't fixed in relation with each other that this is not a rigid motion (although they are valid permutations of the verticies). Thus, $\sigma \not\in D_{2n} $. 
+\end{cex}
+
+In general, we should note that $D_{2n} \neq S_n$. In fact, we claim that $|S_{n}| = n!$ and $|D_{2n} = 2n$.  
+
+Notice that we can 'multiply' in $D_{2n}$ by way of composition, we can reverse any permutation in $D_{2n} $ (i.e., there is an inverse), and theres an element that does nothing. We will shortly see that $D_{2n} $ is in fact a group.
+
+%======= Sept 11, 2017 =======%
+
+\section{Introduction to groups}
+
+\begin{cdef}{Group}{group}
+    A \textbf{group} is a nonempty set $G$ equipped with a binary operation $*: G \times G \to G$ satisfying three conditions:
+    \begin{enumerate}
+        \item Associativity: $a*(b*c) = (a*b)*c$
+        \item Identity: $\exists e \in G \ni a*e = e*a = a$
+        \item Inverse: $\exists a^{-1} \in G \ni a*a^{-1} = a^{-1}*a = e$
+    \end{enumerate}
+    for any $a,b,c \in G$.
+\end{cdef}
+
+\begin{cdef}{Subgroup}{subgroup}
+    A \textbf{subgroup} of a group $(G,*)$ is a nonempty subseteq $H \subseteq G$ that is closed under $*$ and inverses. I.e., for $a,b \in H$:
+    \begin{enumerate}
+        \item $a*b \in H \subseteq G$
+        \item $a^{-1}\in H \subseteq G$
+    \end{enumerate}
+\end{cdef}
+
+Remarks:
+\begin{enumerate}
+    \item $H \leq G$ is the notation for $H$ as a subgroup of $G$.
+    \item Defining $*|_{H \times H} H \times H \to H$ makes $(H, *|_{H \times H})$ a group. In fact, we call this the induced group structure on $H$.
+\end{enumerate}
+
+\begin{cex}{Examples of groups}{}
+    \begin{enumerate}
+        \item The nonzero real numbers $\mathbb{R}^{\times}$
+        \item $GL_{n}(\mathbb{R})$, the set of $n\times n$ invertible real matricies. 
+        \item $S_n$, the group of all permutations.
+    \end{enumerate}
+\end{cex}
+
+\begin{cdef}{Abelian}{abelian}
+    A group $(G, *)$ is called \textbf{abelian} if $*$ is commutative. I.e., for any $a,b \in G$ we have that $a*b = b*a$.
+\end{cdef}
+
+Remarks:
+\begin{enumerate}
+    \item (Multiplicative Notation): We often write $ab$ for $a*b$, and we tent to write $1$ for $e$. This is standard abuse of notation.
+    \item (Additive notation): If we are working with a group $(G, *)$ that we know is abelian, we will often write $a+b$ instead of $a*b$ and $0$ instead of $e$. We also write $-a$ instead of $a^{-1}$. This additive notation is never used if we are unsure of the commutativity of the group.
+\end{enumerate}
+
+\begin{cprop}{P1}{P1}
+    Suppose that $G$ is a group.
+
+    \begin{cprop}{P1a}{P1a}
+        The identity element is unique.
+        \begin{cpf}
+            Suppose $e, e' \in G$ are both identity elements. Then $e = e'e = e'$ since both $e, e'$ are identites.
+        \end{cpf}
+
+    \end{cprop}
+
+    \begin{cprop}{P1b}{P1b}
+        For each $a \in G$, $a$ has a unique inverse.
+        \begin{cpf}
+            Suppose $b,c \in G$ are both inverses of $a$. Then $ab=1=ac$ since $b$ and $c$ are both inverses. Then $b(ab) = b(ac) \implies (ba)b = (ba)c \implies b=c$
+        \end{cpf}
+    \end{cprop}
+
+    \begin{cprop}{}{}
+       $\left( a^{-1} \right)^{-1} = a$
+       \begin{cpf}
+           Since $a^{-1}a = aa^{-1}$, we see that $a$ is the inverse of $a^{-1}$ by definition.
+       \end{cpf}
+    \end{cprop}
+
+    \begin{cprop}{}{}
+        $\left( (ab)^{-1} = b^{-1}a^{-1} \right)$
+        \begin{cpf}
+            \begin{align*}
+                \left( b^{-1}a^{-1} \right) \left( ab \right) & = \left( b^{-1} \right)\left( a^{-1}a \right)\left( b \right) && \text{ by associativity }\\
+                & = \left( b^{-1}b \right) \\
+                & = 1
+            \end{align*}
+            Thus we have that $\left( b^{-1}a^{-1} \right)$ is the left inverse of $(ab)$. Similarly, show that $\left( b^{-1}a^{-1} \right)$ is a right inverse.
+        \end{cpf}
+    \end{cprop}
+
+    \begin{cprop}{Generalized Associativity}{}
+        For $a_1, \cdots, a_n \in G$ we have that $a_1a_2\cdots a_n$ is 'the same no matter how the expression is bracketed'. Proof as exercise
+    \end{cprop}
+    \begin{cprop}{}{}
+        In any group $G$, $1^{-1} = 1$ 
+    \end{cprop}
+\end{cprop}
+
+Notation: For $a \in G$ and $n > 0$ we write $a^n = a\cdot a \cdot \cdots a$. Also, $a^0 = 1$ and $a^{-n} = \left( a^{n} \right)^{-1}$. 
+
+\begin{cprop}{Cancellation Law}{}
+    For any $a,b,u,v \in G$, the \textbf{left cancellation} is $au = av \implies u = v$. The \textbf{right cancellation} law is $ub = vb \implies u = v$.
+
+    Proof sketch: Use the property that every element in the group has an element that is both a left and right inverse.
+\end{cprop}
+
+
+\begin{cdef}{Homomorphism}{}
+    A \textbf{group homomorphism} $\phi : G \to H$ with $(G,*); (H, \cdot)$ as groups is a function with the property that for all $a,b \in G$:
+    \[
+        \phi(ab) = \phi(a) \phi(b)
+    \]
+    To avoid abuse of notation we may write that $\phi(a * b) = \phi(a) \cdot \phi(b)$
+    This is also called a \textbf{morphism of groups}. 
+\end{cdef}
+
+\begin{cdef}{Isomorphism}{}
+    A homomorphism $\phi: G \to H$ is called an \textbf{isomorphism} if $\phi$ is bijective. We write $G \simeq H$ and say that $G$ is \textbf{isomorphic} to $H$ if there exists that bijective function $\phi$. 
+\end{cdef}
+
+\begin{cprop}{P3}{}
+    If $\phi: G\to H$ is a group homomorphism then:
+    \begin{enumerate}
+        \item $\phi(1_G) = 1_H$
+        \item $\forall a \in G$, $\phi(a^{-1}) = \left( \phi(a) \right)^{-1}$
+    \end{enumerate}
+
+    \begin{cpf}
+       Consider the fact that $1_H \phi(1_G) = 1_H \phi(1_G 1_G)$. Since $\phi$ is a homomorphism, then $1_H \phi(1_G 1_G) = 1_H \phi(1_G)\phi(1_G) = \phi(1_G)\phi(1_G)$. Thus we have that $\phi(1_G) = 1_H$. 
+
+       Now consider that $\phi(a^{-1})\phi(a) = \phi(a^{-1}a) = \phi(1_G) = 1_H$. We show this similarly for $\phi(a)\phi(a^{-1})$. Then we have that $\phi(a^{-1}) = \left( \phi(a) \right)^{-1}$. 
+    \end{cpf}
+    
+\end{cprop}
+
+\begin{cdef}{Kernel}{}
+    Let $\phi: G \to H$ be a homomorphism. Then the \textbf{kernel} of $\phi$ is 
+    \[
+    \ker(\phi) = \{ a \in G | \phi(a) = 1_H \}
+    \]
+\end{cdef}
+
+\begin{cprop}{P4}{}
+    Let $ \phi : G \to H$ be a group homomorphism. Then $\ker(\phi) \leq G$. 
+
+    \begin{cpf}
+        We need to show that $\ker(\phi)$ is a subgroup. Suppose that $a,b \in \ker(\phi)$. Observe that since $a,b \in \ker(\phi)$ that $\phi(ab) = 1_H$ so that $ab \in \ker(\phi)$. Similarly, observe that $\phi(a^{-1}) = \left( \phi(a) \right)^{-1} = 1_H$ so $a^{-1} \in \ker(\phi)$. The kernel must also be nonempty since $\phi(1_G) = 1_H$. 
+
+        We have shown that $\ker(\phi)$ is closed under group operation, inverses and is nonempty. Thus it is a subgroup.
+    \end{cpf}
+\end{cprop}
+
+% there are some examples here, bit lazy to copy. 
+
+\begin{cdef}{Inverse to the group homomorphism}{}
+    If $\phi: G \to H$ is a group homomorphism, then an \textbf{inverse} to $\phi$ is a group homomorphism $\psi : H \to G$ such that $\psi \circ \phi = 1_G$. Similarly $\phi \circ \psi = 1_H$. 
+\end{cdef}
+
+Exercise: A group homomorphism is an isomorphism if and only if it has an inverse group homomorphism.
+
+\begin{cprop}{P5}{}
+    Suppose $ \phi : G \to H$ is a surjective group homomorphism. If $G$ is abelian, then so is $H$. 
+
+    \begin{cpf}
+       Let $a,b \in H$ with $a = \phi(r), b = \phi(s)$ for $r,s \in G$.  Then we have that
+       \[
+           ab \underset{\text{surjection}}{=} \phi(r)\phi(s) \overset{homomorphism}{=} \phi(rs) \underset{G \text{ is abelian}}{=} \phi(sr) \underset{\text{homomorphism}}{=} \phi(s)\phi(r) = ba
+       \]
+    \end{cpf}
+\end{cprop}
+
+Corollary: $G \simeq H \implies \left(G \text{ abelian } \iff H \text{ ablelian} \right)$. 
+
+\begin{cex}{}{}
+    Let $G, H$ be the groups $G = \left( \mathbb{Z}_4, \oplus \right)$ and $H = \left( \mathbb{Z}_5^\times, \otimes \right)$ where $\mathbb{Z}_5^\times = \{1,2,3,4\}$ with identity $1$. 
+
+    Let $ \phi : G \to H$ with $\phi(0) = 1; \phi(1) = 2; \phi(2) = 3; \phi(3) = 4$. 
+
+    We see that
+    \begin{equation*}
+        \phi(1 \oplus 1)  = \phi(2) = 3\\
+        \phi(1) \otimes \phi(1) = 2 \otimes 2 = 4\\
+    \end{equation*}
+
+    Since $\phi(1 \otimes 1) \neq \phi(1 \oplus 1)$ we have that $\phi$ is not a group homomorphism. This doesn't imply that $G \not\simeq H$, though! Because in fact, $G \simeq H$. 
+
+    \[
+        \psi(0) = 1; \psi(1) = 2; \psi(2) = 4; \psi(3) = 3
+    \]
+    as one can check for themselves, is an isomorphism.
+\end{cex}
+
+% ===== Sept 18, 2017 ===== %
+
+subsection{Group Actions}
+
+\begin{cdef}{Group Action}{}
+    A (left) \textbf{group action} of a group $G$ on a set $A$ is a function $G \times A \to A$ denoted by $\cdot$. I.e., for $g \in G, a \in A$ a mapping $(g,a) \mapsto g\cdot a \in A$ satisfying the following properties:
+    \begin{enumerate}
+        \item $g_1 \cdot (g_2 \cdot a) = \left( \overset{\text{operation in } G}{g_1g_2} \right) \underset{\text{group action}}{\cdot} a$
+        \item $1_G \cdot a = a$
+    \end{enumerate}
+
+    If $G$ acts on $A$ , for each $g \in G$ we may define the functions:
+    \begin{align*}
+        \sigma_g &: A \to A\\
+        & a \mapsto g\cdot a
+    \end{align*}
+\end{cdef}
+
+\begin{clem}{L6}{}
+    $G$ acts on $A$, $g \in G$. Then $\sigma_g: A\to A$ is a bijection.
+
+    \begin{cpf}
+        Injectivity: Let $a,b \in A$. Suppose that $\sigma_g(a) = \sigma_g(b)$. Then, we have that $g \dot a = g \dot b$. Then $g^{-1}(g\cdot a) = g^{-1}(g \cdot b)$. Then we use the compatability with multiplication property of group actions:
+        \[
+            (g^{-1}g) \cdot a = \left( g^{-1}g \right) \cdot b \implies 1 \cdot a = 1 \cdot b
+        \]
+        Then $a = b$ so $\sigma_g$ is injective.
+
+        Surjectively: Given $b \in A$, let $a := g^{-1}\cdot b$. $\sigma_g(a) = \sigma_g(g^{-1} \cdot b) = g \cdot (g^{-1}\cdot b) = (gg^{-1})\cdot b = b$. Thus we have that $\sigma_g$ is surjective.
+
+        Thus, $\sigma_g$ is bijective.
+    \end{cpf}
+\end{clem}
+
+Warning: Do not confuse the action of $G$ on $A$ and the grou operation in $G$, since they use similar notation (lazy fucks like us drop $a\cdot b$ to $ab$. 
+
+Recall that for any set $A$, we define $S_A : = \text{group of bijections}$ $\sigma: A \to A$ under composition. If $G$ acts on $A$ we have just defined a function
+\begin{align*}
+    G & \to S_A && \text{ by lemma 6}\\
+    g & \mapsto \sigma_g
+\end{align*}
+
+\begin{cprop}{P7: Permutation Representation}{P7}
+    The function $G \to S_A$ given by $g \mapsto \sigma_g$ is a group homomorphism.
+\end{cprop}
+
+Exercise: Prove the converse of P7. 
+
+\begin{cdef}{Trivial Homomorphism}{}
+    Let $G,H$ be groups. The \textbf{Trivial Homomorphism} $\phi: G \to H$ is $\phi(g) = 1_H$ for all $g \in G$. That is, $\ker(\phi) = G$. 
+\end{cdef}
+
+\begin{cdef}{Kernel of the action}{}
+    Suppose that $G$ acts on $A$ and $\phi : G \to S_A; g \mapsto \sigma_g$ is the corresponding homomorphism. We call $\ker(\phi) \leq G$ the \textbf{kernel of the action of $G$ on $A$}. It is the set of elements in $G$ that act trivially on $A$. 
+\end{cdef}
+
+
+
+%========== Sept 25 2017 ============%
+
+Last time: Left cosets and Lagrange's Theorem.
+
+Remark: We could have also considered right cosets. i.e., $a \in G, H \leq G, H_a := \{ha | h \in H\}$.
+
+\begin{cdef}{Quotient group? Set of left cosets}{}
+    Let $H \leq G$. Then we have that:
+    \begin{align}
+        G/H & := \text{ the set of all left cosets of } H \in G 
+        & := \{ah | a \in G\}
+    \end{align}
+\end{cdef}
+We have a natural action of $G$ on $G/H$ given by:
+\[
+    g \cdot aH : = (ga)H
+\]
+for $g \in G$.
+
+The kernel of this action
+\begin{align}
+   & = \{ g \in G | gaH = aH \, \forall a \in G \} \\
+   & = \{ g \in G | a^{-1}ga  \in H \, \forall a \in G \}\\
+\end{align}
+
+What subgroup is this? We'll come back to it.
+
+Recall the kernel of an action: If $G$ acts on $A$ then we have a group homomorphism $G \to S_A$. The kernel of the action is the kernel of this homomorphism. I.e., $ker = \left\{ g \in G | ga = a \forall a \in A \right\}$. 
+
+\begin{cex}{Left cosets generalize congruence classes}{}
+    \begin{enumerate}
+        \item Let $G = (\mathbb{Z}, +)$ with $H = d\mathbb{Z} \leq \mathbb{Z}$ fix $d > 0$. Consider $\mathbb{Z}/d\mathbb{Z}$.
+            \begin{align*}
+                \mathbb{Z}/d\mathbb{Z} &= \{ a + d\mathbb{Z} | a \in \mathbb{Z} \}\\
+                & = \{ [a]_d | a \in \mathbb{Z} \}\\
+            \end{align*}
+            where $[a]_d = \{ n \in \mathbb{Z} | n \equiv a (mod d) \} = a + d\mathbb{Z}$.
+            So the congruence class of $a \mod d$ is just the left coset of $d\mathbb{Z}$ by $a$. One way we can think of this is a generalization of congruence classes to any group. This has a natural group structure. That is, $[a]_d + [b]_d = [a+b]_d$.
+            $d\mathbb{Z}$ is all integer multiples of $d$ (i think?).
+    \end{enumerate}
+\end{cex}
+
+Now, lets try to put a natural group structure on $G/H$. $(aH)(bH) := abH$. 
+
+But in general, given any two subsets $X \subseteq G, Y \subseteq G$ of a group $G$ we have that $XY := \{ xy | x \in X, y \in Y \} \subseteq G$.
+
+If $X = aH, Y = bH$ then $XY = \{ ah_1bh_2 | h_1, h_2 \in H \}$, and $abH = \{ abh | h \in H \}$. We see that $abH \subseteq XY$, and that in general, $XY \not\subseteq abH$. Although if $G$ is abelian, then we do have that $XY = abH$ and then $(aH)(bH) := abH$ is a good definition for a group structure on $G/H$. 
+
+But this is a strong assertion. In fact, for our definition to be nice, all we need is for $h_1 \in H$ that $h_1b = bh'$ for some $h' \in H$. Then we have that $ah_1bh_2 = abh'h_2 = abh$.
+
+\begin{cdef}{Normal subgroup}{normalSubgroup}
+    A subgroup $H \leq G$ is \textbf{normal} if for every $b\in G, Hb = bH$.
+    i.e., $\forall h\in H \exists h' \in H \ni hb = bh'$.
+
+    We denote a normal subgroup by $H \triangleleft G$. (Read: H triangle G)
+\end{cdef}
+
+Recall prop. 11 is the proposition about left cosets, and prop 12. was Lagrange's theorem.
+
+\begin{cprop}{Normal subgroup equivalencies}{}
+    Let $H \subset G$. Then the following are equivalent:
+    \begin{enumerate}
+        \item $H \triangleleft G$
+        \item $b^{-1} Hb \subseteq H \forall b \in G$
+        \item $b^{-1}Hb = H$ 
+    \end{enumerate}
+
+    \begin{cpf}
+        (i) $\iff$ (iii): Let $H \triangleleft G$ and $b \in G$. We have that $Hb = bH  \iff b^{-1}Hb = H$. 
+        \begin{align*}
+           Hb & = \{ hb | h \in H \} \\
+           bH & = \{ bh | h \in H \}\\
+           b^{-1}Hb &= \{ b^{-1}hb | h \in H \}
+        \end{align*}
+
+        (iii) $\implies$ (ii): This is clear (if they are equal, then one is contained within the other). 
+
+        (ii) $\implies$ (iii): Apply (ii) to $b^{-1}$. Then we have that $\left( b^{-1} \right)^{-1} H \left( b^{-1} \right) \subseteq H$. Then:
+        \begin{align*}
+            bHb^{-1} & \subseteq H\\
+            Hb^{-1} & \subseteq b^{-1}H\\
+            H \subseteq b^{-1}Hb\\
+            H = b^{-1}Hb\\
+        \end{align*}
+        
+    \end{cpf}
+\end{cprop}
+
+\begin{cprop}{lemma}{}
+    %If $H \triangleleft H$ and $a,b \in G$ then $\underbar_{(aH)(bH)}{set product} = (ab)H$
+    Proof as an exercise. This is what motivated the definition of normal!
+\end{cprop}
+
+Remark: Suppose $H \triangleleft H$. Let $G$ act on $G/H$. The kernel of the action is $H$. ProoF: Let $h\in H, a \in G$. Then $haH = ah'H$ since $H$ is normal to $G$. Then $haH = aH$. Thus $h$ is in the kernel of the action. Now suppose $g \in G$ is in the kernel of the action. So $gaH - aH$ for all $a$. In particular, let $a = 1$. So then $gH = H$. By proposition 11a, we must have that $g \in H$. Thus $H$ is the kernel of the action.
+
+%====== Sept 27, 2017 =======%
+
+
+subsection{cyclic subgroups}
+
+\begin{cdef}{Cyclic Subgroups}{}
+    Let $G$ be a group with $a \in G$. The \textbf{cyclic cubgroup of } $G$ \textbf{ generated by a} is $\left< a \right> := \{ a^n | n \in \mathbb{Z} \}$. 
+\end{cdef}
+
+\begin{cprop}{P15}{}
+    Let $G$ be a group, $a \in G$. 
+    \begin{enumerate}
+        \item $\langle a \rangle \leq G$. 
+            \begin{cpf}
+                \begin{align*}
+                    a^{n}a^{m} = a^{n+m} \in \langle a \rangle \\
+                    \left( a^{n} \right)^{-1} = \left( a^{-1} \right)^{n} = a^{-n} \in \langle a \rangle\\
+                    1 = a^{0} \in \langle a \rangle 
+                \end{align*}
+            \end{cpf}
+        \item $ \langle s \rangle$ is the smallest subgroup of $G$ that contains $a$
+            \begin{cpf}
+                
+                $ \langle  \leq G \rangle$ by part (a). $a \in \langle a \rangle$ since $a = a^{-1}$. 
+
+                If $H \leq g$ and $a \in H$ then since $H$ is closed under group multiplication and inverses, $a^{n} \in H$ for all $n \in \mathbb{Z}$. So  $ \langle a \rangle \leq H$
+            \end{cpf}
+        \item Suppose order of $a$ is finite, say $n$. Then $ \langle a \rangle = \{ 1, a, a^2, \cdots, a^{n-1} \}$ and $| \langle a \rangle| = n$. 
+            \begin{cpf}
+                If $n=1$ then $a = 1$. So it is clear that $ \langle a \rangle = \{ 1 \}$. Now assume $a > 1$. Let $m \in \mathbb{Z}$, where $m = qn + r$ i.e., $0 \leq r < n$ is the remainder. Then:
+                \begin{align*}
+                    a^{m} = a^{qn+r} = \left( a^{n} \right)^{q}a^{r} = 1^{q}a^{r} = a^{r} \in \{ 1, a, \cdots, a^{n-1} \}. 
+                \end{align*}
+
+                Therefore for finite order $n$, $ \langle a \rangle = \{1, a, \cdots, a^{n-1}$. 
+
+                Now suppose $0 \leq r \leq s < n$ with $a^{r} = a^s \implies a^{s-r} = a^{s}a^{-r} = 1$. 
+
+                But $0 \leq s-r < n$. By minimality of order, $s-r = 0$. So $1, a, a^2, \cdots, a^{n-1}$ are all distinct and $| \langle a \rangle| = n$.
+            \end{cpf}
+        \item If $G$ is finite then every element of $G$ has finite order.
+            \begin{cpf}
+                $1, a, a^2, \cdots$ cannot all be distinct as $G$ is finite. So for some $s > r \geq 1$, it must be that $a^{s} = a^{r}$. So $ a^{s-r} = 1$. 
+            \end{cpf}
+        \item If $G$ is finite, then $order(a) \mid |G|$.
+            \begin{cpf}
+                By part (a) , we have that $ \langle a \rangle \leq G$. By Lagrange's theorem, $ |\langle a \rangle| \mid |G|$. By part (d), $a$ has finite order.  By part (c) we have that $order(a) = | \langle a \rangle|$
+            \end{cpf}
+        \item If $G$ is finite, $|G| = n$, then $a^{n}$. 
+            \begin{cpf}
+                By part (d) and (e), the order of $a$ is finite and $order(a) \mid n$. Let $l = order(a)$ for some $n = lk$, $k \in \mathbb{Z}$. Then
+                \[
+                    a^{n} = a^{lk} = \left( a^l \right)^k = 1^k = 1
+                \]
+            \end{cpf}
+        \item If $|G|$ is prime, then $G$ is \textbf{cyclic}. I.e., $G =  \left\langle a  \right\rangle $ by some $a \in G$.
+            \begin{cpf}
+                Let $a \in G, a \neq 1$. The order of $a$ is finite and $order(a) \mid |G|$. This implies that $order(a) = 1$ or $|G|$. But $order(a) = 1 \implies a = 1$ which is not possible so $order(a) = |G|$. But by part (c), $order(a) = | \langle a \rangle|$. Therefore $ \langle a \rangle = G$. 
+            \end{cpf}
+        \item Every subgroup of a cyclic group is cyclic.
+            \begin{cpf}{}{}
+                Generalization of HW2 Q1. Proof similar.
+            \end{cpf}
+        % \item If $G$ is a finite group then $|a| \mid |G|$. 
+        %     \begin{cpf}
+        %         We have that $|a| = | \langle a \rangle |$ and $ \langle a \rangle \leq G$ using (c) and(e). Then we apply Langrange's theorem for the desired result.
+        %     \end{cpf}
+        % \item If $|G| = n$ then $a^{n} = 1$ for all $a \in G$. 
+        %     \begin{cpf}
+        %         It must be that for some $s \geq r$ that $a^{s} = a^{r} $, since $G$ is infinite.
+        %     \end{cpf}
+    \end{enumerate}
+\end{cprop}
+
+Now back to subgroups (in general). 
+
+Last time we defined $H \triangleleft G$ and we showed if $H \triangleleft H$ then $(aH)(bH) = (ab)H$. I.e., $H \triangleleft G$ says that $bH = Hb$. 
+
+\begin{cprop}{P16}{}
+    If $H \triangleleft G$ then ($G/H = $ the set of all left cosets) is a group under set multiplication. Moreover, $\pi : G \to G/H$ given $\pi(g) = gH$ is a group surjective homomorphism. 
+    \begin{cdef}{Quotient group, map}{}
+        $G/H$ is called the \textbf{quotient group} and $\pi : G \to G/H$ is called the \textbf{quotient map}
+    \end{cdef}
+
+    \begin{cpf}
+        Associtaivity: 
+        \begin{align*}
+            (aHbH)cH & = (abH)(cH) && \text{by P14}\\
+            & = (ab)cH && \text{ by 14 }\\
+            & = a(bc)H && \text{ since $G$ associative }\\
+            & = aHbcH &&\text{ by 14}\\
+            & = aH(bHcH) &&\text{ by 14}\\
+        \end{align*}
+
+        The inverse of $aH$ is $a^{-1}H$. We have that $aHa^{-1}H = aa^{-1}H = 1H = H_{G/H}$ by 14. Similarly, $a^{-1}H aH = H = 1_{G/H}$. So $\left( aH \right)^{-1} = a^{-1}H$. 
+
+        The identity in $G/H$ is $H$. 
+        \begin{align*}
+            aHH & = aH
+            HaH = aH
+        \end{align*}
+        Therefore $G/H$ is a group under set multipication. 
+
+        \begin{align*}
+            \pi(ab) = abH = aHbH &&\text{ by 14}\\
+            & = \pi(a)\pi(b)
+        \end{align*}
+    \end{cpf}
+
+\end{cprop}
+
+Remark: $\ker(\pi) = H$. Proof: See that $\pi(a) = 1_{G/H} \iff aH = H \iff a \in H$ by 11a.
+
+
+% ===== September 29, 2017 ===== %
+
+Last time: $H \triangleleft G$ then $G/H$ is a group under the set ??? and $\pi : G \to G/h; \, \, a \mapsto aH$ is a group homomorphism with $\ker(\pi) H$. 
+
+\begin{cex}{Normal subgroups and quotient maps}{}
+    \begin{enumerate}
+        \item $ \langle 1 \rangle = \{ 1 \} \triangleleft G$
+            $a1a^{-1} = 1$ for any $a \in G$. 
+            $ \pi : G \to G/ \langle 1 \rangle$ (Quotient map)
+            $\pi$ is an ismorphism: 
+            \begin{align*}
+                \pi(a) = \pi(b) \iff a \langle 1 \rangle = b \langle 1 \rangle\\
+                \iff a = b
+            \end{align*}
+
+            Hence $G \simeq G/ \langle 1 \rangle$. 
+        \item $H = G \triangleleft G$ since forany $a \in G$,  $aGa^{-1} \subseteq G$ and $\pi : G \to G/G$. $G/G$ is the trivial. Got any $a \in G$, $aG = G$. 
+        \item If $G$ is abelian, then every $H \leq G$ is normal i.e., $H \triangleleft G$. $\forall a\in G, h \in H, $ we have $aha^{-1} = aa^{-1}h = h \in H$ therefore $aHa^{-1} \leq H$. 
+            \begin{cex}{abelian normal ness}{}
+                $G = (\mathbb{Z}, +)$. $H = d\mathbb{Z}$ with $d \geq 0$. $d=0$ in case (i), $d = 1$ in case (ii), and $d > 1$ $\mathbb{Z}/d\mathbb{Z}$ group of congruence classes modulo d.
+            \end{cex}
+        \item If $\phi : G \to H$ is a group homomorphism then $\ker(\phi) \triangleleft G$. 
+            \begin{cpf}
+                Let $a \in G, b \in \ker(\phi) $.
+                \begin{align*}
+                    \phi(aba^{-1}) = \phi(a)\phi(b)\phi(a)^{-1}\\
+                    & = \phi(a)\phi(a)^{-1} &&\text{ since b in kernel }\\
+                    & = 1_H
+                \end{align*}
+            \end{cpf}
+            Then $a \ker(\phi) a^{-1} \subset$ 
+
+            So normal subgroups of $G$ are precisely the kernels of homomorphisms on $G$. 
+
+            % = more concrete examples = %
+        \item Let $G = D_{10}$ be the group of rigid transformations of the regular pentagon dihedral group of order 10. Let $S \in D_{10}$ be a reflection. We see $\order(s) = 2$. Then $ \langle s \rangle = \{1,5\} \subseteq D_{10}$. We can see that $ \langle s \rangle \not \triangleleft D_{10}$. Let $r = \frac{2\pi}{s}$ be clockwise rotation. $rsr^{-1} = rrs = r^2 s \neq 1 \neq s$. Since every element of $D_{10}$ can be written uniquely as $r^{i}s^{k}$. So $r^2s \neq 1 \neq s$ and $rsr^{-1} \not\in \langle s \rangle$. Therefore $ \langle s \rangle$ is not normal to $d_{10}$. 
+
+            On the other hand, $ \langle r \rangle = \{ 1, r, r^2, r^3, r^4 \}$. so $\order r = 5$. We claim $ \langle r \rangle \triangleleft D_{10}$. 
+            \begin{cpf}
+                Let $a \in D_{10}$. Let $a = r^is^k$. Let $l \in \{1, 2, 3, 4\}$. $ar^la^{-1} = r^is^kr^ls^{-k}r^{-1}$. 
+
+                If $k=0$: $ar^{l}a^{-1} = r^ir^lr^{-1} = r^{l} \in \langle r \rangle$. 
+                
+                If $k = 1$: $ar^{l}a^{-1} = r^{i}(sr^l)s^{-1}r^{-i} = r^{i}r^{-l}ss^{-1}r^{-i} = r^{-l} \in \langle r \rangle$. 
+                
+                Thus $ar^la^{-1} \in \langle r \rangle$ and $a \langle r \rangle a^{-1} \subset \langle \rangle$. Thus $ \langle r \rangle \triangleleft d_{10}$. 
+            \end{cpf}
+
+            Consider now $pi: D_{10}\to D_{10}/ \langle r \rangle$ be a quotient map. What is $D_{10} / \langle r \rangle $?
+
+            $\abs{D_{10}} = 10, \abs{ \langle r \rangle} = 5$ by Lagrange's theorem. There are exactly two cosets:
+            \begin{align*}
+                \langle r \rangle  & = \{ 1, r, r^2, r^3, r^4 \}\\
+                s \langle r \rangle & = \{s, sr, sr^2, sr^3, sr^4 \}\\
+            \end{align*}
+
+            Thus $D_{10} / \langle r \rangle$ is a group of size $2$. 
+            
+            Up to isomorphisms, there is only one group with two elements. 
+            \begin{cpf}
+                Let $G =\{ 1, a \}$ with $a \neq 1$. 
+
+                Look at the \textbf{Caley Graph}. 
+                \begin{center}
+                    \begin{tabular}{|c| |c| |c|}
+                    $G$ & 1 & a \\
+                    \hline
+                    1 & 1 & a \\
+                    \hline
+                    a & a & a\\
+                \end{tabular}
+            \end{center}
+
+                We claim $a^2 = 1 \text{ or } a$. $a^2 = a \implies a = 1$ which is not possible, so $a^2 = 1$. 
+            \end{cpf}
+
+        \item $G = \mathbb{C}^\times $ multiplicative group of complex numbers $S : = \{ z \in \mathbb{C}^\times \mid |z| = 1 \}$. 
+
+
+            % Draw unit circle about origin, complex plane
+
+            $S \leq \mathbb{C}^\times$, $ |Zn| = |z||w|$, $\left| frac 1z \right| = \frac{1}{\left| z \right|}$. 
+
+            We see that $\mathbb{C}^\times$ abelian $\implies S \triangleleft \mathbb{C}^\times$. But what is $\mathbb{C}^\times / S$? In fact, $\mathbb{C}^\times / S \simeq \left( \mathbb{R}^{> 0 }, \cdot \right)$. 
+
+            $ \pi : \mathbb{C}^\times \to \mathbb{C}^\times / S$. 
+
+            A typical element of $ \mathbb{C}^\times / S$ is a left coset $wS$ where $w \in \mathbb{C}^\times$. 
+
+            Claim: $wS$ is the circle of radius $|w|$. To see this, consider $z \in S$. We have that $|wz| = |w||z| = |w|$. If $|0| = |w| \implies v = w \cdot \frac vw$, with $\left| \frac{v}{w} \right| = \frac{|v|}{|w|} = 1$. Then $\frac vw \in S$. 
+
+            So $\mathbb{C}^\times / S $ is the set of all circles in the complex plane centered about the origin. 
+
+            $vS \cdot wS = vwS$ which is a circle of radius $|vw| = |v||w|$. In $\mathbb{C}^\times$ we multiply circles by multiplying radii. 
+
+    \end{enumerate}
+\end{cex}
+
+Given $ H \triangleleft G$, consider the quotient map $ \pi : G \to G/H$. Given an element $aH \in G/H$, the \textbf{fibre} $\pi^{-1}(aH) = aH \subseteq G$. Note: $aH$ is an \textit{element} as the argument of $\pi^{-1}$, but its output $aH$ is a \textit{subset}. To see this consider $b \in G$. $\pi(b) = aH \iff bH = aH $. 
+\begin{align*}
+    \iff a^{-1}b \in H & \iff a^{-1}b = h \text{ for some $h \in H$}\\
+    & \iff b = ah \text{ for some $h \in H$}\\
+    & = b \in aH\\
+\end{align*}
+
+Reminder that $aH = bH \iff a^{-1}b \in H \iff a \in bH \iff b \in aH$. 
+
+Since $H = \ker{\pi}$, the fibres of $\pi$ are all left cosets of the kernel. 
+
+\begin{cprop}{P17?}{}
+    Let $\phi: G \to H$ be a group homomorphism, and $K = \ker{\phi} \triangleleft G$. The nonempty fibres of $\phi$ are the left cosets of $K$. 
+
+    \begin{cpf}
+        Consier $h \in Im(\phi) \leq H$. ($h$ in the image of $\phi$ which is a subgroup of $H$). Fix $a \in \phi^{-1}(h) := \{ g \in G | \phi(g) = a \}$. We claim that $\phi^{-1}(h) = aK$. Let $b \in G$. Then:
+
+        \begin{align*}
+            b \in \phi^{-1} & \iff \phi(b) = h\\
+            & \iff \phi(b) = \phi(a) \\
+            & \iff \phi(a)^{-1}\phi(b) = 1_H\\
+            & \iff \phi(a^{-1}b) = 1_H \\
+            & \iff a^{-1}b \in K\\
+            & \iff b \in aK
+        \end{align*}
+        Thus a fibre is a left coset.
+
+        Conversely, let $aK$ be a left coset. 
+        \begin{align*}
+            b \in aK & \implies b = ak \text{ for some $k \in K$}\\
+            & \implies \phi(b) = \phi(a)\phi(b) = \phi(a) \text{ since $k \in K = \ker{\phi}\\
+            & \implies b \in \phi^{-1}(\phi(a))
+        \end{align*}
+
+        Thus $ aK \subseteq \phi^{-1}(\phi(a)) = bK$. But by the previous pary, $\phi^{-1}(\phi(a)) = bK$ for some $b \in G \implies aK = bK = \phi^{-1}(\phi(a))$. 
+    \end{cpf}
+\end{cprop}
+
+\begin{ccor}{C18}{}
+    A group homomorphism $\phi : G \to H$ is injective if and only if $\ker{\phi} = \langle 1 \rangle$. 
+
+    \begin{cpf}
+        By the previous proposition (P17) the nonempty fibres of $\phi$ are cosets of $\ker{\phi}$. 
+
+        \begin{align*}
+            \phi \text{ is injective } & \iff \text{ the nonempty fibres are singletons} 
+        \end{align*}
+
+        Since $\ker{\phi} \tp a \ker{\phi} \, \, \, x \mapsto ax$ is a bijection, $a \ker{\phi}$  is a singleton $\iff \ker{\phi}$ is a singleton $\iff \ker{\phi} = \langle 1 \rangle$. 
+    \end{cpf}
+\end{ccor}
+
+Given $\phi : G \to H$ homormorphism, we know that $\ker{\phi} \triangleleft G$. Consdier $\pi : G \to G / \ker{\phi}$ as a quotient homomorphism. We see now that $\ker{\pi} = \ker{\phi}$.
+
+\begin{cthm}{Universal Property of Quotients}{}
+    Suppose $N \triangleleft G$. Then the quotient map $\pi : G \to G /N$ is universal with respect to all group homomorphisms on $G$ whose kernel is contains $N$. 
+
+    That is, if $\phi : G \tp H$ is any group homomorphism with $\ker{\phi} \leq N$ then there exists a unique group homomorphism $\bar{\phi} : G/N to H$ such that
+    
+    % commuting diagram. G to H via phi. G to G/N via pi. G/N to H via phi bar. G top, G/N bot, H right of G. Counterclockwise symbol in the middle.
+
+
+    This means for any $a \in G$, we have that $\bar{\phi} \pi(a) = \phi(a)$. We say that $\bar{\phi}$ is \textbf{induced} by $\phi$. 
+
+    \begin{cpf}
+        Define $\bar{\phi} : G/N \tp H$ by $\bar{\phi}(aN) = \phi(a)$. for any $a \in G$. 
+
+        Well defined: Suppose $aN = bN \implies b^{-1}a \in N \leq \ker{\phi} \implies \phi(b^{-1}a) = 1_H \implies \phi(b^{-1})\phi(a) = 1_H \implies \phi(a) = \phi(b)$. 
+
+        Now we show $\bar{\phi}$ is a homomorphism. 
+        \begin{align*}
+            \bar{\phi}\left( (aN)(bN) \right) & = \bar{\phi}(abN)\\
+            & = \phi(ab) = \phi(a)\phi(b)\\
+            & = \bar{\phi}(aN) \bar{\phi}(bN)
+        \end{align*}
+
+        Commuting diagram: $a \in G$. Then 
+        \[
+            \bar{\phi}(\pi(a)) = \bar{ \phi}(aN) = \phi(a)
+        \]
+
+        Exercise: Show that $\bar{\phi}$ is the unique such homomorphism $G/N \to H$. 
+    \end{cpf}
+\end{cthm}
+
+% October 4th
+
+Note. So far, we've roughly covered the following sections in Dummit and Foote: 1.1, 1.2, 1.3, 1.6, 1.7, 2.1, 2.3, 3.1, 3.2. Now, we are (roughly) covering section 3.3
+
+Last time: We covered the universal property.
+
+\begin{ccor}{C20: First Isomorphism Theorem}{}
+    This is actually a standard name for this theorem. 
+
+    If $ \phi : H \to H$ is a surjective group homomorphism, then $G/\ker{\phi} \simeq H$. 
+
+    \begin{cpf}
+        We know $\ker{phi} \triangleleft G$. Now we apply the Universal Property to get induced homomorphism. 
+
+        % insert commuting diagram. G down to G mod ker(phi) via pi. G mod ker(phi) (upleft) to H via phi bar. G right to H via phi. counterclockwise in middle
+
+\[ \begin{tikzcd}
+        G \arrow{r}{\varphi} \arrow[swap]{d}{\phi} & H \\
+        G/\ker{\phi} \arrow{ur}{\bar{\phi}}\\
+\end{tikzcd}
+\]
+
+        $\bar{\phi}$ is surjective: If $h \in H$ since $\phi$ is surjactve, $h = \phi(a)$ for some $a \in G$. Then $\bar{\phi}(a \ker{\phi}) = \phi(a) = h$. 
+
+        $\bar{\phi}$ is injective: Let $a \ker{\phi} \in G/\ker{\phi}$ such that $\bar{\phi}(a \ker{\phi}) = 1_H$. This implies $\phi(a) = 1_H \implies a \in \ker{\phi} \implies a\ker{\phi} = \ker{\phi} = 1_{G/\ker{\phi}}$. Therefore, $\ker{\bar{\phi}} = \langle 1_{G/\ker{\phi} \rangle$. By 18, $\bar{\phi}$ is injective. 
+    \end{cpf}
+\end{ccor}
+
+\begin{cev}{}{}
+    \begin{enumerate}
+        \item $\phi : \mathbb{C}^\times \to \mathbb{R}^{> 0}$ with $z \mapsto |z|$. This is a group homomorphism since $|zw| = |z||w|$. (i.e., taking modulus is a group homomorphism). This is clearly surjective. 
+
+            $\ker{\phi} = \{ z \in \mathbb{C}^\times \mid |z| = 1 \} = S$ The circle of radius 1 centred at the origin. By the first isomorphism theorem, we have $\mathbb{C}^\times / S \simeq \mathbb{R}^{> 0}$. 
+
+        \item $ \text{rem} : \left( \mathbb{Z}, + \right) \to \left( \mathbb{Z}_{m}, \oplus \right)$ for $m>1$. Where $\left( \mathbb{Z}_{m}, \oplus \right)$ is has modulo $m$ addition on $ \{ 0, 1, \cdots, m \}$. 
+
+            $\text{rem}(n) = $ remainder when $n$ is divided by $m$. 
+
+            We have seen that this is a surjective group homomorphism $\ker{\text{tem}} = \{ n \in \mathbb{Z} \mid \text{rem}(n) = 0 \} = m\mathbb{Z}$. Then by 20, $\mathbb{Z} / m\mathbb{Z} \simeq \mathbb{Z}_{m}$.  
+    \end{enumerate}
+\end{cev}
+
+Recall that $H, K$ are subgroups of $G$ where $HK = \{ hk \mid \h in H, k \in K \} \subseteq G$ where $HK$ is set multiplication. 
+
+Note also that $H subseteq HK$ and $K \subseteq HK$ since $h \in H, h = h\cdot 1$ and $k \in K, k = 1\cdot k$. 
+
+In general, $HK$ may \textbf{not} be a subgroup of $G$. 
+
+\begin{cex}{Set multiplication does not yield subgroups}{}
+    Let $G = D_{10}$. $H = \langle s \rangle = \{ 1,s \}$. $K = \langle sr \rangle = \{ 1, sr \}$ (since $(sr)^2 = srsr = s^2r^{-1}r = 1$. Then $HK = \{ 1, sr, s, r \}$. Then we may see that $HK \not\leq D_{10}$ since $s, r \in HK$ and $rs \not\in HK$. 
+\end{cex}
+
+\begin{clem}{L21}{}
+    Let $H \leq G$ and $K \leq G$. If one of $H$ or $K$ is normal in $G$ then $HK \leq G$. 
+
+    \begin{cpf}
+        Suppose $H \triangleleft G$. Let $h_1, h_2 \in H$ and $k_1, k_2 \in K$. Then we have that $ \left( h_1k_1 \right) \left( h_2k_2 \right) = h_1h'k_1k_2 \in HK$ for some $h' \in H$. Since $H$ normal to $G$ we have $k_1H = Hk_1$. Similar argument for $K$ normal to $G$. 
+
+        Now we show closed under inverses. Let $h in H$, $k \in K$. 
+        \begin{align*}
+            \left( hk \right)^{-1} & = k^{-1}h^{-1}\\
+            & = h'k^{-1} && \text{ for some $h' \in H$}\\
+            & \in HK && \text{ since $k^{-1} \in K$ as $K \leq G$}
+        \end{align*}
+        And a similar argument if $K$ is normal to $G$. 
+    \end{cpf}
+\end{clem}
+
+\begin{cthm}{Second Isomorphism Theorem}{}
+    Let $G$ be a group with $N \triangleleft G$, $H \leq G$. Then $H \cap N \triangleleft H$ and $H / H\cap N \simeq HN/N$. 
+
+    % picture. G on top. Split down H left, down N right. G - N via triangleright. HN right below G. HN split down to H, N. HN - N via triangleright. H downright H intersect N via triangleright. N downleft H intersect N. HN - N underbrace HN / N approx H - (H intersect N). 
+
+    \begin{cpf}
+        Consdier $\phi: H \to G/N$ given by (insert image)
+
+        So $\phi(h) = hN$ is a homomorphism. 
+
+        We will show that $\Im{\phi} = HN/N$
+    \end{cpf}
+\end{cthm}
+\end{document} 
