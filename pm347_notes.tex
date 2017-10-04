@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
+\usepackage{tikz-cd}
 \usepackage[most]{tcolorbox} 
 \usepackage[english]{babel} 
 \usepackage[margin=1in]{geometry} 
@@ -19,13 +20,14 @@
 \newtcbtheorem[number within=section]{cprop}{Proposition}{colback=orange!5,colframe=orange!35!black,fonttitle=\bfseries}{th} 
 \newtcbtheorem[number within=section]{cdef}{Definition}{colback=blue!5,colframe=blue!35!black,fonttitle=\bfseries}{th} 
 \newtcbtheorem[number within=section]{cex}{Example}{colback=purple!5,colframe=purple!35!black,fonttitle=\bfseries}{th} 
-\tcolorboxenvironment{cpf}{% 'proof' from 'amsthm'
+\newtcolorbox{cpf}{% 'proof' from 'amsthm'
     blanker, breakable, left=5mm,
     before skip=10pt, after skip=10pt,
     borderline west={1mm}{0pt}{green}}
 
 \DeclareMathOperator{\order}{order}
 \newcommand{\abs}[1]{ \left| #1 \right|}
+\newcommand{\rem}{rem}
 
 
 %===============================%
@@ -640,7 +642,7 @@ Since $H = \ker{\pi}$, the fibres of $\pi$ are all left cosets of the kernel.
         Conversely, let $aK$ be a left coset. 
         \begin{align*}
             b \in aK & \implies b = ak \text{ for some $k \in K$}\\
-            & \implies \phi(b) = \phi(a)\phi(b) = \phi(a) \text{ since $k \in K = \ker{\phi}\\
+            & \implies \phi(b) = \phi(a)\phi(b) = \phi(a) \text{ since $k \in K = \ker{\phi}$ }\\
             & \implies b \in \phi^{-1}(\phi(a))
         \end{align*}
 
@@ -658,7 +660,7 @@ Since $H = \ker{\pi}$, the fibres of $\pi$ are all left cosets of the kernel.
             \phi \text{ is injective } & \iff \text{ the nonempty fibres are singletons} 
         \end{align*}
 
-        Since $\ker{\phi} \tp a \ker{\phi} \, \, \, x \mapsto ax$ is a bijection, $a \ker{\phi}$  is a singleton $\iff \ker{\phi}$ is a singleton $\iff \ker{\phi} = \langle 1 \rangle$. 
+        Since $\ker{\phi} \to a \ker{\phi} \, \, \, x \mapsto ax$ is a bijection, $a \ker{\phi}$  is a singleton $\iff \ker{\phi}$ is a singleton $\iff \ker{\phi} = \langle 1 \rangle$. 
     \end{cpf}
 \end{ccor}
 
@@ -667,7 +669,7 @@ Given $\phi : G \to H$ homormorphism, we know that $\ker{\phi} \triangleleft G$.
 \begin{cthm}{Universal Property of Quotients}{}
     Suppose $N \triangleleft G$. Then the quotient map $\pi : G \to G /N$ is universal with respect to all group homomorphisms on $G$ whose kernel is contains $N$. 
 
-    That is, if $\phi : G \tp H$ is any group homomorphism with $\ker{\phi} \leq N$ then there exists a unique group homomorphism $\bar{\phi} : G/N to H$ such that
+    That is, if $\phi : G \to H$ is any group homomorphism with $\ker{\phi} \leq N$ then there exists a unique group homomorphism $\bar{\phi} : G/N \to H$ such that
     
     % commuting diagram. G to H via phi. G to G/N via pi. G/N to H via phi bar. G top, G/N bot, H right of G. Counterclockwise symbol in the middle.
 
@@ -675,7 +677,7 @@ Given $\phi : G \to H$ homormorphism, we know that $\ker{\phi} \triangleleft G$.
     This means for any $a \in G$, we have that $\bar{\phi} \pi(a) = \phi(a)$. We say that $\bar{\phi}$ is \textbf{induced} by $\phi$. 
 
     \begin{cpf}
-        Define $\bar{\phi} : G/N \tp H$ by $\bar{\phi}(aN) = \phi(a)$. for any $a \in G$. 
+        Define $\bar{\phi} : G/N \to H$ by $\bar{\phi}(aN) = \phi(a)$. for any $a \in G$. 
 
         Well defined: Suppose $aN = bN \implies b^{-1}a \in N \leq \ker{\phi} \implies \phi(b^{-1}a) = 1_H \implies \phi(b^{-1})\phi(a) = 1_H \implies \phi(a) = \phi(b)$. 
 
@@ -719,27 +721,27 @@ Last time: We covered the universal property.
 
         $\bar{\phi}$ is surjective: If $h \in H$ since $\phi$ is surjactve, $h = \phi(a)$ for some $a \in G$. Then $\bar{\phi}(a \ker{\phi}) = \phi(a) = h$. 
 
-        $\bar{\phi}$ is injective: Let $a \ker{\phi} \in G/\ker{\phi}$ such that $\bar{\phi}(a \ker{\phi}) = 1_H$. This implies $\phi(a) = 1_H \implies a \in \ker{\phi} \implies a\ker{\phi} = \ker{\phi} = 1_{G/\ker{\phi}}$. Therefore, $\ker{\bar{\phi}} = \langle 1_{G/\ker{\phi} \rangle$. By 18, $\bar{\phi}$ is injective. 
+        $\bar{\phi}$ is injective: Let $a \ker{\phi} \in G/\ker{\phi}$ such that $\bar{\phi}(a \ker{\phi}) = 1_H$. This implies $\phi(a) = 1_H \implies a \in \ker{\phi} \implies a\ker{\phi} = \ker{\phi} = 1_{G/\ker{\phi}}$. Therefore, $\ker{\bar{\phi}} = \langle 1_{G/\ker{\phi} \rangle}$. By 18, $\bar{\phi}$ is injective. 
     \end{cpf}
 \end{ccor}
 
-\begin{cev}{}{}
+\begin{cex}{}{}
     \begin{enumerate}
         \item $\phi : \mathbb{C}^\times \to \mathbb{R}^{> 0}$ with $z \mapsto |z|$. This is a group homomorphism since $|zw| = |z||w|$. (i.e., taking modulus is a group homomorphism). This is clearly surjective. 
 
             $\ker{\phi} = \{ z \in \mathbb{C}^\times \mid |z| = 1 \} = S$ The circle of radius 1 centred at the origin. By the first isomorphism theorem, we have $\mathbb{C}^\times / S \simeq \mathbb{R}^{> 0}$. 
 
-        \item $ \text{rem} : \left( \mathbb{Z}, + \right) \to \left( \mathbb{Z}_{m}, \oplus \right)$ for $m>1$. Where $\left( \mathbb{Z}_{m}, \oplus \right)$ is has modulo $m$ addition on $ \{ 0, 1, \cdots, m \}$. 
+        \item $ \rem : \left( \mathbb{Z}, + \right) \to \left( \mathbb{Z}_{m}, \oplus \right)$ for $m>1$. Where $\left( \mathbb{Z}_{m}, \oplus \right)$ is has modulo $m$ addition on $ \{ 0, 1, \cdots, m \}$. 
 
-            $\text{rem}(n) = $ remainder when $n$ is divided by $m$. 
+            $\rem(n) = $ remainder when $n$ is divided by $m$. 
 
-            We have seen that this is a surjective group homomorphism $\ker{\text{tem}} = \{ n \in \mathbb{Z} \mid \text{rem}(n) = 0 \} = m\mathbb{Z}$. Then by 20, $\mathbb{Z} / m\mathbb{Z} \simeq \mathbb{Z}_{m}$.  
+            We have seen that this is a surjective group homomorphism $\ker{\rem} = \{ n \in \mathbb{Z} \mid \rem(n) = 0 \} = m\mathbb{Z}$. Then by 20, $\mathbb{Z} / m\mathbb{Z} \simeq \mathbb{Z}_{m}$.  
     \end{enumerate}
-\end{cev}
+\end{cex}
 
-Recall that $H, K$ are subgroups of $G$ where $HK = \{ hk \mid \h in H, k \in K \} \subseteq G$ where $HK$ is set multiplication. 
+Recall that $H, K$ are subgroups of $G$ where $HK = \{ hk | h \in H, k \in K \} \subseteq G$ where $HK$ is set multiplication. 
 
-Note also that $H subseteq HK$ and $K \subseteq HK$ since $h \in H, h = h\cdot 1$ and $k \in K, k = 1\cdot k$. 
+Note also that $H \subseteq HK$ and $K \subseteq HK$ since $h \in H, h = h\cdot 1$ and $k \in K, k = 1\cdot k$. 
 
 In general, $HK$ may \textbf{not} be a subgroup of $G$. 
 
